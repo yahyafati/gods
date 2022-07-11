@@ -1,6 +1,8 @@
 package gods
 
-import "fmt"
+import (
+	"fmt"
+)
 
 type SinglyLinkedList[T comparable] struct {
 	head *Node[T]
@@ -129,4 +131,27 @@ func (list *SinglyLinkedList[T]) Contains(val T) bool {
 		node = node.next
 	}
 	return false
+}
+
+func (list *SinglyLinkedList[T]) Poll() (T, bool) {
+	if list.head == nil {
+		return *new(T), false
+	}
+	if list.head.next == nil {
+		val := list.head.val
+		list.head = list.head.next
+		return val, true
+	}
+
+	node := list.head
+	var val T
+	for {
+		if node.next.next == nil {
+			val = node.next.val
+			node.next = nil
+			break
+		}
+		node = node.next
+	}
+	return val, true
 }
