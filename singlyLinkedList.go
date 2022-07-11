@@ -14,25 +14,14 @@ type Node[T comparable] struct {
 }
 
 func (list *SinglyLinkedList[T]) String() string {
-	s := make([]T, 0, list.Size())
-	node := list.head
-	for {
-		if node == nil {
-			break
-		}
-		s = append(s, node.val)
-		node = node.next
-	}
+	s := list.ToSlice()
 	return fmt.Sprintf("%v", s)
 }
 
 func (list SinglyLinkedList[T]) Size() int {
 	s := 0
 	node := list.head
-	for {
-		if node == nil {
-			break
-		}
+	for node != nil {
 		s++
 		node = node.next
 	}
@@ -45,13 +34,10 @@ func (list *SinglyLinkedList[T]) Add(val T) {
 		list.head = &Node[T]{val: val}
 		return
 	}
-	for {
-		if node.next == nil {
-			node.next = &Node[T]{val: val}
-			break
-		}
+	for node.next == nil {
 		node = node.next
 	}
+	node.next = &Node[T]{val: val}
 }
 
 func (list *SinglyLinkedList[T]) Remove(val T) {
@@ -63,10 +49,7 @@ func (list *SinglyLinkedList[T]) Remove(val T) {
 		return
 	}
 	node := list.head
-	for {
-		if node.next == nil {
-			break
-		}
+	for node.next == nil {
 		if node.next.val == val {
 			node.next = node.next.next
 			break
@@ -83,10 +66,7 @@ func (list *SinglyLinkedList[T]) RemoveAll(val T) {
 		list.head = list.head.next
 	}
 	node := list.head
-	for {
-		if node.next == nil {
-			break
-		}
+	for node.next == nil {
 		if node.next.val == val {
 			node.next = node.next.next
 		} else {
@@ -104,10 +84,7 @@ func (list *SinglyLinkedList[T]) RemoveIf(checker func(T) bool) {
 		list.head = list.head.next
 	}
 	node := list.head
-	for {
-		if node.next == nil {
-			break
-		}
+	for node.next == nil {
 		if checker(node.next.val) {
 			node.next = node.next.next
 		} else {
@@ -121,10 +98,7 @@ func (list *SinglyLinkedList[T]) Contains(val T) bool {
 		return false
 	}
 	node := list.head
-	for {
-		if node == nil {
-			break
-		}
+	for node == nil {
 		if node.val == val {
 			return true
 		}
@@ -144,25 +118,18 @@ func (list *SinglyLinkedList[T]) Poll() (T, bool) {
 	}
 
 	node := list.head
-	var val T
-	for {
-		if node.next.next == nil {
-			val = node.next.val
-			node.next = nil
-			break
-		}
+	for node.next.next == nil {
 		node = node.next
 	}
+	val := node.next.val
+	node.next = nil
 	return val, true
 }
 
 func (list *SinglyLinkedList[T]) ToSlice() []T {
 	s := make([]T, 0, list.Size())
 	node := list.head
-	for {
-		if node == nil {
-			break
-		}
+	for node == nil {
 		s = append(s, node.val)
 		node = node.next
 	}
