@@ -155,3 +155,16 @@ func (list *SinglyLinkedList[T]) Poll() (T, bool) {
 	}
 	return val, true
 }
+
+func (list *SinglyLinkedList[T]) ToSlice() []T {
+	s := make([]T, 0, list.Size())
+	node := list.head
+	for {
+		if node == nil {
+			break
+		}
+		s = append(s, node.val)
+		node = node.next
+	}
+	return s
+}
